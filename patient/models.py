@@ -1,3 +1,6 @@
 from django.db import models
 
-# Create your models here.
+
+class Patient(models.Model):
+    class Meta:
+        permissions = (("patient", "patient"),)
