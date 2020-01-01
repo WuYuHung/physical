@@ -9,6 +9,7 @@ def index(request):
     username = None
     if request.user.is_authenticated:
         username = request.user.username
+    print(username)
     tasks = Task.objects.filter(patient=username)
     df = list()
     for task in tasks:

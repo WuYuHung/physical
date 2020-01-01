@@ -15,6 +15,10 @@ def login(request):
         auth.login(request, user)
         if user.has_perm("patient.patient"):
             return redirect(request.GET.get("next", "/patient"))
+        if user.has_perm("doctor.doctor"):
+            return redirect(request.GET.get("next", "/doctor"))
+        if user.has_perm("staff.staff"):
+            return redirect(request.GET.get("next", "/staff"))
         return redirect(request.GET.get("next", "/"))
     else:
         error_msg = "帳號或密碼錯誤！"
