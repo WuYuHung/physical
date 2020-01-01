@@ -18,3 +18,6 @@ def login(request):
     else:
         error_msg = "帳號或密碼錯誤！"
     return render(request, "login.html", {"error_msg": error_msg})
+
+
+
