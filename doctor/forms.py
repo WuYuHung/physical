@@ -12,7 +12,7 @@ class HomeForm(forms.ModelForm):
         ("聽力檢查", "聽力檢查"),
     )
     kind = forms.MultipleChoiceField(
-        required=False, widget=CheckboxSelectMultiple(), choices=OPTIONS
+        required=True, widget=CheckboxSelectMultiple(), choices=OPTIONS
     )
 
     class Meta:
