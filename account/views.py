@@ -19,6 +19,14 @@ def login(request):
             return redirect(request.GET.get("next", "/doctor"))
         if user.has_perm("staff.staff"):
             return redirect(request.GET.get("next", "/staff"))
+        if (
+            request.user.has_perm("staff.blood")
+            or request.user.has_perm("staff.x-ray")
+            or request.user.has_perm("staff.heart")
+            or request.user.has_perm("staff.sight")
+            or request.user.has_perm("staff.hear")
+        ):
+            return redirect(request.GET.get("next", "/staff"))
         return redirect(request.GET.get("next", "/"))
     else:
         error_msg = "帳號或密碼錯誤！"

@@ -16,22 +16,27 @@ body {font-family: "Lato", sans-serif}
 <div class="w3-top">
   <div class="w3-bar w3-black w3-card">
     <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
-    <a href="#" class="w3-bar-item w3-button w3-padding-large">HOME</a>
     <a href="#band" class="w3-bar-item w3-button w3-padding-large w3-hide-small">BAND</a>
-    <a href="#" class="w3-padding-large w3-hover-red w3-hide-small w3-right">LOGOUT</a>
+    <a href="/account/logout/" class="w3-padding-large w3-hover-red w3-hide-small w3-right">LOGOUT</a>
   </div>
 </div>
 
 
+  
+
+<!-- The Band Section -->
+<div class="w3-container w3-content w3-center w3-padding-64" style="max-width:800px" id="band">
+    <h2 class="w3-wide">健康檢查時間軸</h2>
+    <p class="w3-opacity"><i>部門：{{ department }}</i></p>
+    
+    <!--test-->
+  <!--<button class="w3-content" onclick="test()">{{x}}</button>-->
+</div>
+
 <!-- Page content -->
 <div class="w3-content" style="max-width:2000px;margin-top:46px">
-
-  <!-- The Band Section -->
-  <div class="w3-container w3-content w3-center w3-padding-64" style="max-width:800px" id="band">
-    <h2 class="w3-wide">標題</h2>
-    <p class="w3-opacity"><i>副標題</i></p>
-    <p class="w3-justify">內文</p>
-  </div>
+{{ chart|safe }}
+</div>
 
   
 

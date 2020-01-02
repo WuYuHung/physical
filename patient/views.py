@@ -3,9 +3,12 @@ from django.http import HttpResponse
 import plotly.figure_factory as ff
 from .models import Task
 from datetime import timedelta
+from django.http import HttpResponseForbidden
 
 
 def index(request):
+    if not (request.user.is_authenticated and request.user.has_perm("patient.patient")):
+        return HttpResponseForbidden("403 Forbidden", content_type="text/html")
     username = None
     if request.user.is_authenticated:
         username = request.user.username
@@ -30,4 +33,3 @@ def index(request):
     string = fig.to_html()
 
     return render(request, "patient.html", {"chart": string, "username": username})
-

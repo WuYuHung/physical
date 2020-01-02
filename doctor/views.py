@@ -29,7 +29,6 @@ class HomeView(TemplateView):
         if form.is_valid():
             instance = form.save(commit=False)
             kinds = json.loads(instance.kind.replace("'", '"'))
-            print(datetime.now())
             for kind in kinds:
                 instance.kind = kind
                 Task.objects.create(
