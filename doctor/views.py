@@ -12,6 +12,7 @@ from patient.models import Task
 from datetime import timedelta
 from datetime import datetime
 import math
+from django.http import HttpResponseForbidden
 
 
 # def index(request):
@@ -48,6 +49,10 @@ class HomeView(TemplateView):
     template_name = "doctor.html"
 
     def get(self, request):
+        if not (
+            request.user.is_authenticated and request.user.has_perm("doctor.doctor")
+        ):
+            return HttpResponseForbidden("403 Forbidden", content_type="text/html")
         form = HomeForm()
         username = None
         if request.user.is_authenticated:
@@ -77,7 +82,7 @@ class HomeView(TemplateView):
         return render(
             request,
             self.template_name,
-            {"form": form, "chart": string, "user": username},
+            {"form": form, "chart": string, "username": username},
         )
 
     def post(self, request):
@@ -135,4 +140,4 @@ class HomeView(TemplateView):
             #   text = form.cleaned_data['post']
             form = HomeForm()
             return redirect("/doctor")  # Add
-        return render(request, self.template_name, {"form": form})
+        return render(request, self.template_name, {"form": form, "username": username})
