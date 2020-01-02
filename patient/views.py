@@ -9,7 +9,6 @@ def index(request):
     username = None
     if request.user.is_authenticated:
         username = request.user.username
-    print(username)
     tasks = Task.objects.filter(patient=username)
     df = list()
     for task in tasks:
@@ -21,7 +20,12 @@ def index(request):
         temp_dict["Resource"] = task.kind
         df.append(temp_dict)
     fig = ff.create_gantt(
-        df, index_col="Resource", show_colorbar=True, group_tasks=True
+        df,
+        index_col="Resource",
+        show_colorbar=True,
+        group_tasks=True,
+        title=username + "健康檢查時程表",
+        show_hover_fill=False,
     )
     string = fig.to_html()
 
