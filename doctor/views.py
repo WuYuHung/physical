@@ -27,6 +27,8 @@ kind_dict = {i: index for index, i in enumerate(("抽血", "心電圖", "X光", 
 def get_base():
     tasks = Task.objects.all()
     time_stamp = math.inf
+    if not tasks:
+        return datetime.fromtimestamp((datetime.now().timestamp() // 300) * 300)
     for task in tasks:
         current = task.start_time.timestamp()
         if task.start_time.timestamp() < time_stamp:
@@ -58,8 +60,13 @@ class HomeView(TemplateView):
         if request.user.is_authenticated:
             username = request.user.username
         tasks = Task.objects.all()
-        print(request.user.username)
         df = list()
+        if not tasks:
+            return render(
+                request,
+                self.template_name,
+                {"form": form, "chart": "", "username": username},
+            )
         for task in tasks:
             temp_dict = dict(Task=task.kind)
             temp_dict["Task"] = task.patient
@@ -75,7 +82,7 @@ class HomeView(TemplateView):
             index_col="Resource",
             show_colorbar=True,
             group_tasks=True,
-            title=username + "健康檢查時程表",
+            title="健康檢查時程表",
             show_hover_fill=False,
         )
         string = fig.to_html()
@@ -86,15 +93,14 @@ class HomeView(TemplateView):
         )
 
     def post(self, request):
-        base = get_base()
         username = None
         if request.user.is_authenticated:
             username = request.user.username
         form = HomeForm(request.POST)
         if form.is_valid():
+            base = get_base()
             instance = form.save(commit=False)
             kinds = json.loads(instance.kind.replace("'", '"'))
-            print(kinds)
             task_todo = list()
             for i in kinds:
                 task_todo.append(kind_dict[i])
@@ -102,18 +108,14 @@ class HomeView(TemplateView):
             now_time = datetime.fromtimestamp(
                 ((int(datetime.now().timestamp()) + 300) // 300 + 1) * 300
             )
-            print(now_time, base)
             now_index = int((now_time - base).total_seconds() // 300)
             iterator = now_index
-            print(iterator)
             location = [None] * 5
             time = get_table()
-            print(time)
             while True:
                 flag = 0
                 for i in task_todo:
                     if i not in time[iterator]:
-                        print(time)
                         time[iterator].append(i)
                         location[i] = iterator
                         iterator += 2
